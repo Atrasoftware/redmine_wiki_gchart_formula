@@ -1,0 +1,9 @@
+<% changesets.each do |changeset| %>
+    <div class="changeset <%= cycle('odd', 'even') %>">
+    <p>
+        <span class="author"><%= authoring(changeset.committed_on, changeset.author) %></span></p>
+    <div class="wiki">
+        <%= textilizable(changeset, :comments) %>
+    </div>
+    </div>
+<% end %>

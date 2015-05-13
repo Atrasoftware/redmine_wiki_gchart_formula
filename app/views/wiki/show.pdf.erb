@@ -1,0 +1,39 @@
+<meta charset='utf-8' />
+<%= wicked_pdf_stylesheet_link_tag "application" -%>
+<%= wicked_pdf_javascript_include_tag "application" %>
+
+
+<%= wiki_page_breadcrumb(@page) %>
+<h2><%= "#{@project} - #{@page.title} - # #{@page.content.version}" %></h2>
+<br/>
+<% unless @content.current_version? %>
+    <%= title [@page.pretty_title, project_wiki_page_path(@page.project, @page.title, :version => nil)],
+              [l(:label_history), history_project_wiki_page_path(@page.project, @page.title)],
+              "#{l(:label_version)} #{@content.version}" %>
+
+    <p>
+      <%= link_to(("\xc2\xab " + l(:label_previous)),
+                  :action => 'show', :id => @page.title, :project_id => @page.project,
+                  :version => @content.previous.version) + " - " if @content.previous %>
+      <%= "#{l(:label_version)} #{@content.version}/#{@page.content.version}" %>
+      <%= '('.html_safe + link_to(l(:label_diff), :controller => 'wiki', :action => 'diff',
+                                  :id => @page.title, :project_id => @page.project,
+                                  :version => @content.version) + ')'.html_safe if @content.previous %> -
+      <%= link_to((l(:label_next) + " \xc2\xbb"), :action => 'show',
+                  :id => @page.title, :project_id => @page.project,
+                  :version => @content.next.version) + " - " if @content.next %>
+      <%= link_to(l(:label_current_version), :action => 'show', :id => @page.title, :project_id => @page.project, :version => nil) %>
+      <br />
+      <em><%= @content.author ? link_to_user(@content.author) : l(:label_user_anonymous)
+      %>, <%= format_time(@content.updated_on) %> </em><br />
+      <%=h @content.comments %>
+    </p>
+    <hr />
+<% end %>
+<div class="wiki wiki-page">
+  <%= textilizable @content, :text, :attachments => @content.page.attachments,
+                   :edit_section_links => (@sections_editable && {:controller => 'wiki', :action => 'edit', :project_id => @page.project, :id => @page.title}) %>
+</div>
+
+<%= link_to_attachments @page %>
+

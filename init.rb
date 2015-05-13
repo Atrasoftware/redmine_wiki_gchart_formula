@@ -25,10 +25,14 @@ require 'wiki_gchart_formula_pdf_patch'
 
 Redmine::Plugin.register :redmine_wiki_gchart_formula do
   name 'Redmine Wiki Gchart LaTeX-style Formula plugin'
-  author 'Masamitsu MURASE'
+  author 'Masamitsu MURASE and updated by bilel KEDIDI'
   description 'This plugin enables Redmine to render LaTeX-style formula images in Wiki.'
-  version '0.0.5'
+  version '1.0.0'
   url 'https://github.com/masamitsu-murase/redmine_wiki_gchart_formula/'
-  author_url 'http://masamitsu-murase.blogspot.com/'
+  author_url 'https://github.com/bilel-kedidi/'
+end
+Rails.application.config.to_prepare do
+  IssuesController.send(:include, PatchesGchart::IssuesControllerPatch)
+  WikiController.send(:include, PatchesGchart::WikiControllerPatch)
 end
 

@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 
 module WikiGchartFormula
-  SUPPORT_PDF = Redmine::VERSION.to_s.start_with?("1.3.")
+  SUPPORT_PDF = Redmine::VERSION.to_s.start_with?("2.")
 
   def self.support_pdf?
     return SUPPORT_PDF

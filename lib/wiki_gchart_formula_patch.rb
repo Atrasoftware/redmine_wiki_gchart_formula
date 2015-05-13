@@ -30,22 +30,13 @@ module WikiGchartFormula
       base.send(:include, InstanceMethod)
 
       base.class_eval do
-        if (method_defined?(:parse_macros))
-          # for Redmine 1.3.0
-          alias_method_chain :parse_macros, :gchart_formula
-        elsif (method_defined?(:parse_inline_attachments))
-          # for Redmine 1.2.X
+        if method_defined?(:parse_inline_attachments)
           alias_method_chain :parse_inline_attachments, :gchart_formula
         end
       end
     end
 
     module InstanceMethod
-      def parse_macros_with_gchart_formula(text, project, obj, attr, only_path, options)
-        WikiGchartFormulaMacro.inline_wiki_gchart_formula(text)
-        parse_macros_without_gchart_formula(text, project, obj, attr, only_path, options)
-      end
-
       def parse_inline_attachments_with_gchart_formula(text, project, obj, attr, only_path, options)
         WikiGchartFormulaMacro.inline_wiki_gchart_formula(text)
         parse_inline_attachments_without_gchart_formula(text, project, obj, attr, only_path, options)
