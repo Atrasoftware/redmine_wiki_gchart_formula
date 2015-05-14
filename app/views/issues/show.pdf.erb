@@ -3,12 +3,6 @@
 <%= wicked_pdf_javascript_include_tag "application" %>
 
 <h2> <%= "#{@issue.project} - #{@issue.tracker} ##{@issue.id}" %></h2>
-<style>
-    td{
-        margin: 0px;
-        padding: 0px;
-    }
-</style>
 <div>
 
   <%= avatar(@issue.author, :size => "50") %>
@@ -166,6 +160,7 @@
       <%= render :partial => 'changesets', :locals => { :changesets => @changesets} %>
     </div>
 <% end %>
+
 <% if @journals.present? %>
 <div id="history">
   <h3><%=l(:label_history)%></h3>

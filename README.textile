@@ -2,9 +2,10 @@ h1. wiki_gchart_formula (LaTeX-style formula plugin for Redmine)
 
 h2. Overview
 
-* This Redmine plugin enables Redmine to render LaTeX-style formula images in Wiki.
+* This Redmine plugin enables Redmine to render LaTeX-style formula images in Wiki and issue.
 * This plugin uses "Google Chart API":http://code.google.com/apis/chart/infographics/docs/formulas.html, so it works *without* any other software, such as @latex@ or @dvips@.
 * You *can* use curly braces in formula.
+* you can render LaTex-style in pdf, using wkhtmltopdf gem.
 
 h2. How to write in Redmine Wiki
 
@@ -62,6 +63,9 @@ h3. Version 0.0.4
 Support Redmine 1.2.X.
 
 h3. Version 0.0.5
+
+h3. Version 2.0.0
+Support Redmine 2.X
 
 Bug fix about conflicts with some plugins.
 Thank you for your report, Ryan Edwards!
