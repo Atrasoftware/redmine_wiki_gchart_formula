@@ -1,0 +1,31 @@
+<% reply_links = authorize_for('issues', 'edit') -%>
+<% for journal in journals %>
+  <div id="change-<%= journal.id %>" class="<%= journal.css_classes %>">
+    <div id="note-<%= journal.indice %>">
+    <h4><%= link_to "##{journal.indice}", {:anchor => "note-#{journal.indice}"}, :class => "journal-link" %>
+    <%= avatar(journal.user, :size => "24") %>
+    <%= authoring journal.created_on, journal.user, :label => :label_updated_time_by %>
+    <%= content_tag('span', l(:field_is_private), :class => 'private') if journal.private_notes? %></h4>
+
+    <% if journal.details.any? %>
+    <ul class="details">
+      <% details_to_strings(journal.visible_details).each do |string| %>
+       <li><%= string %></li>
+      <% end %>
+    </ul>
+    <% end %>
+      <%
+         content = ''
+         editable = User.current.logged? && (User.current.allowed_to?(:edit_issue_notes, issue.project) || (journal.user == User.current && User.current.allowed_to?(:edit_own_issue_notes, issue.project)))
+         links = []
+         content << content_tag('div', links.join(' ').html_safe, :class => 'contextual') unless links.empty?
+         content << textilizable(journal, :notes)
+         css_classes = "wiki"
+         css_classes << " editable" if editable
+
+
+      %>
+    <%=  content_tag('div', content.html_safe, :id => "journal-#{journal.id}-notes", :class => css_classes)%>
+    </div>
+  </div>
+<% end %>

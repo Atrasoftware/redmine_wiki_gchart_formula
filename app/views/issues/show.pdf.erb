@@ -16,6 +16,8 @@
   <div class="subject">
     <%= render_issue_subject_with_tree(@issue) %>
   </div>
+
+  <h4><%= "#{format_time(@issue.created_on)} - #{@issue.author}" %></h4>
   <table style="width:100%; border-collapse: collapse;" border="1">
     <tr>
       <%
@@ -63,7 +65,7 @@
               rows.right l(:field_due_date), format_date(@issue.due_date), :class => 'due-date'
             end
             unless @issue.disabled_core_fields.include?('done_ratio')
-              rows.right l(:field_done_ratio), progress_bar(@issue.done_ratio, :width => '80px', :legend => "#{@issue.done_ratio}%"), :class => 'progress'
+              rows.right l(:field_done_ratio), "#{@issue.done_ratio}%", :class => 'progress'
             end
             unless @issue.disabled_core_fields.include?('estimated_hours')
               unless @issue.estimated_hours.nil?
@@ -71,7 +73,7 @@
               end
             end
             if User.current.allowed_to?(:view_time_entries, @project)
-              rows.right l(:label_spent_time), (@issue.total_spent_hours > 0 ? link_to(l_hours(@issue.total_spent_hours), issue_time_entries_path(@issue)) : "-"), :class => 'spent-time'
+              rows.right l(:label_spent_time), (@issue.total_spent_hours > 0 ? link_to(l_hours(@issue.total_spent_hours), issue_time_entries_path(@issue)) : l_hours(0)), :class => 'spent-time'
             end
           end %>
           <% right.each do |k, v| %>
@@ -103,14 +105,15 @@
 
       </td>
     </tr>
+    <% checklists = @issue.checklists
+       if checklists and checklists.any? %>
     <tr>
       <td colspan="2">
         <div class="description">
           <p><strong>Checklist</strong></p>
           <div class="wiki">
 
-            <% checklists = @issue.checklists
-               if checklists and checklists.any? %>
+
                 <%  checklists.each_with_index do |checklist_item, index| %>
                     <p >
                       <span style="<%= checklist_item.is_done ? 'text-decoration: line-through;' : '' %>">
@@ -118,12 +121,11 @@
                       </span>
                     </p>
                 <%  end %>
-            <%  end  %>
           </div>
         </div>
       </td>
     </tr>
-
+    <%  end  %>
   </table>
 
 
@@ -163,4 +165,10 @@
       <h3><%=l(:label_associated_revisions)%></h3>
       <%= render :partial => 'changesets', :locals => { :changesets => @changesets} %>
     </div>
+<% end %>
+<% if @journals.present? %>
+<div id="history">
+  <h3><%=l(:label_history)%></h3>
+  <%= render :partial => 'history', :locals => { :issue => @issue, :journals => @journals } %>
+</div>
 <% end %>

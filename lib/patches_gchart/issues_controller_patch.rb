@@ -7,7 +7,7 @@ module  PatchesGchart
 
       base.send(:include, InstanceMethods)
       base.class_eval do
-        #alias_method_chain :show, :change_pdf
+        alias_method_chain :show, :change_pdf
       end
     end
 
